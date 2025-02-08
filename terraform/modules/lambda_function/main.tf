@@ -1,3 +1,7 @@
+locals {
+  quarifier = "current"
+}
+
 resource "terraform_data" "lambda_function" {
   triggers_replace = {
     role_arn      = var.iam_role_arn
@@ -23,9 +27,13 @@ resource "terraform_data" "lambda_function" {
   }
 }
 
+data "aws_lambda_function_url" "url" {
+  function_name = var.function_name
+}
+
 data "aws_lambda_alias" "current" {
   function_name = var.function_name
-  name          = "current"
+  name          = local.quarifier
 
   depends_on = [
     terraform_data.lambda_function,
