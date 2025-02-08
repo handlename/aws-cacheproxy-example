@@ -1,5 +1,5 @@
 allowedHosts:
-  # https://www.jma.go.jp/bosai/warning/#area_type=class20s&area_code=%s&lang=ja
-  - name: www.jma.go.jp
+  - name: example.com
     paths:
-      - bosai/warning/
+      - /foo
+      - /bar/*
