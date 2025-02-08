@@ -4,10 +4,10 @@ import "github.com/kayac/go-config"
 
 type Config struct {
 	Secret       string               `yaml:"secret"`
-	AllowedHosts []ConfigAllowedHosts `yaml:"allowedHosts"`
+	AllowedHosts []ConfigAllowedHost `yaml:"allowedHosts"`
 }
 
-type ConfigAllowedHosts struct {
+type ConfigAllowedHost struct {
 	// Name is a name of the allowed host.
 	Name string `yaml:"name"`
 
