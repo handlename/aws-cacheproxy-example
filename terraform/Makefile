@@ -1,11 +1,15 @@
+PLAN_FILE := plan.out
+
 init:
 	terraform init
 
 plan: init
-	terraform plan -out=plan.out
+	terraform plan -out=$(PLAN_FILE)
 
 apply: init
-	terraform apply plan.out
+	terraform apply $(PLAN_FILE)
+	rm $(PLAN_FILE)
+
 
 lock:
 	terraform provider lock \
