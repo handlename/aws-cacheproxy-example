@@ -16,7 +16,7 @@ provider "aws" {
   default_tags {
     tags = {
       ManagedBy = "terraform"
-      GroupBy   = "aws-cacheproxy-example"
+      For       = "aws-cacheproxy-example"
     }
   }
 }
