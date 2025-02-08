@@ -3,7 +3,7 @@ terraform {
 
   required_providers {
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
       version = "~> 5.0.0"
     }
   }
@@ -16,7 +16,7 @@ provider "aws" {
   default_tags {
     tags = {
       ManagedBy = "terraform"
-      GroupBy = "aws-cacheproxy-example"
+      GroupBy   = "aws-cacheproxy-example"
     }
   }
 }
