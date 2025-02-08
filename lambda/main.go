@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"net/http"
 	"os"
@@ -9,15 +10,21 @@ import (
 	"go.uber.org/zap"
 )
 
+type Flags struct {
+	ConfigPath string
+	Port       int
+}
+
 func main() {
 	initLogger(os.Getenv("LOG_LEVEL"))
 	defer logger.Sync()
 
-	// TODO: use flag
-	configPath := "config.yaml"
-	port := 8080
+	f := Flags{}
+	flag.StringVar(&f.ConfigPath, "config", "config.yaml", "config file path")
+	flag.IntVar(&f.Port, "port", 8080, "port number")
+	flag.Parse()
 
-	conf, err := loadConfig(configPath)
+	conf, err := loadConfig(f.ConfigPath)
 	if err != nil {
 		logger.Fatal("failed to load config", zap.Error(err))
 	}
@@ -28,6 +35,6 @@ func main() {
 	var mux = http.NewServeMux()
 	mux.HandleFunc("/", server.Handler)
 
-	logger.Info("start server", zap.String("listen", fmt.Sprintf("http://localhost:%d", port)))
-	ridge.Run(fmt.Sprintf(":%d", port), "/", mux)
+	logger.Info("start server", zap.String("listen", fmt.Sprintf("http://localhost:%d", f.Port)))
+	ridge.Run(fmt.Sprintf(":%d", f.Port), "/", mux)
 }
