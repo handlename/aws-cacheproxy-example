@@ -30,12 +30,3 @@ resource "terraform_data" "lambda_function" {
 data "aws_lambda_function_url" "url" {
   function_name = var.function_name
 }
-
-data "aws_lambda_alias" "current" {
-  function_name = var.function_name
-  name          = local.quarifier
-
-  depends_on = [
-    terraform_data.lambda_function,
-  ]
-}
