@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strings"
 
 	"go.uber.org/zap"
 )
@@ -59,10 +60,36 @@ func (s *Server) Handler(w http.ResponseWriter, r *http.Request) {
 		zap.Int("content_length", len(content)))
 }
 
+type SpecialChar rune
+
+const (
+	SpecialCharWildcard SpecialChar = '*'
+)
+
 // AllowedURL checks if the given URL is allowed to be accessed.
 func (s *Server) AllowedURL(u *url.URL) bool {
-	// TODO
-	return true
+	for _, host := range s.Config.AllowedHosts {
+		if host.Name != u.Host {
+			continue
+		}
+
+		for _, path := range host.Paths {
+			if strings.HasSuffix(path, string(SpecialCharWildcard)) {
+				prefix := strings.TrimSuffix(path, string(SpecialCharWildcard))
+				if strings.HasPrefix(u.Path, prefix) {
+					logger.Debug("matched with wildcard pattern", zap.String("host", host.Name), zap.String("path", path))
+					return true
+				}
+			}
+
+			if path == u.Path {
+				logger.Debug("matched with exact pattern", zap.String("host", host.Name), zap.String("path", path))
+				return true
+			}
+		}
+	}
+
+	return false
 }
 
 // Fetch fetches the content of the given URL.
