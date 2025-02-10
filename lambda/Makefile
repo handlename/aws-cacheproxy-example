@@ -19,6 +19,9 @@ deploy: build
 diff:
 	lambroll diff $(LAMBROLL_FLAGS)
 
+destroy:
+	lambroll delete
+
 build: clean
 	mkdir -p $(BUILD_DIR)
 	$(MAKE) $(BUILD_DIR)/app

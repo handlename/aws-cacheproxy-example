@@ -10,6 +10,8 @@ apply: init
 	terraform apply $(PLAN_FILE)
 	rm $(PLAN_FILE)
 
+destroy: init
+	terraform apply -destroy
 
 lock:
 	terraform provider lock \
