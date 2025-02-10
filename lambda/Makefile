@@ -1,20 +1,19 @@
 BUILD_DIR := build
 TFSTATE_PATH := ../terraform/terraform.tfstate
-LAMBROLL_FLAGS := \
-	--function function.jsonnet \
-	--function-url function_url.jsonnet
+LAMBROLL_FUNCTION := function_url.jsonnet
+LAMBROLL_FUNCTION_URL := function.jsonnet
 
 export ROLE_ARN := $(shell cat $(TFSTATE_PATH) | jq -r '.resources[] | select(.type == "aws_iam_role") | select(.name == "lambda") | .instances[0].attributes.arn')
 export GOOS := linux
 export GOARCH := arm64
 
 dryrun: build
-	lambroll deploy $(LAMBROLL_FLAGS)\
+	lambroll deploy \
 	    --src $(BUILD_DIR) \
         --dry-run
 
 deploy: build
-	lambroll deploy $(LAMBROLL_FLAGS) \
+	lambroll deploy $\
         --src $(BUILD_DIR)
 
 diff:
